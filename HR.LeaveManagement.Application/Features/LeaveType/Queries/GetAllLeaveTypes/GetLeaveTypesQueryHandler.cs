@@ -27,7 +27,7 @@ namespace HR.LeaveManagement.Application.Features.LeaveType.Queries.GetAllLeaveT
             var leaveTypes = await _leaveTypeRepository.GetAsync();
 
             //covert objects to DTOs
-            var data = _mapper.Map<List<LeaveTypeDetailDto>>(leaveTypes);
+            var data = _mapper.Map<List<LeaveTypeDto>>(leaveTypes);
 
             //return list of DTO objects
             return data;
