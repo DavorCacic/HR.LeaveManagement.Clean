@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HR.LeaveManagement.Application.Contracts.Persistance;
+using HR.LeaveManagement.Application.Exceptions;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,10 @@ namespace HR.LeaveManagement.Application.Features.LeaveType.Commands.DeleteLeave
             var leaveTypeToBeDeleted = await _leaveTypeRepository.GetByIdAsync(request.Id);
 
             //verify that record exist
-
+            if (leaveTypeToBeDeleted == null)
+            {
+                throw new NotFoundException(nameof(LeaveType), request.Id);
+            }
 
             // add to DB
             await _leaveTypeRepository.DeleteAsync(leaveTypeToBeDeleted);
