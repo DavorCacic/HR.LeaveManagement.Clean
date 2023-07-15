@@ -36,8 +36,10 @@ namespace HR.LeaveManagement.Persistence.DatabaseContext
             return base.SaveChangesAsync(cancellationToken);
         }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //on model createing, it uses any IEntityTypeConfiguration (like LeaveTypeConfiguration.cs)
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(HrDatabaseContext).Assembly);
 
             base.OnModelCreating(modelBuilder);

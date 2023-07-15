@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HR.LeaveManagement.Persistence.Configurations
 {
-    internal class LeaveTypeConfiguration : IEntityTypeConfiguration<LeaveType>
+    public class LeaveTypeConfiguration : IEntityTypeConfiguration<LeaveType>
     {
         public void Configure(EntityTypeBuilder<LeaveType> builder)
         {
