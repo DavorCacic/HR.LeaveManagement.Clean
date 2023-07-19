@@ -18,6 +18,10 @@ namespace HR.LeaveManagement.Application.Features.LeaveType.Commands.CreateLeave
         {
             _leaveTypeRepository = leaveTypeRepository;
 
+            RuleFor(p => p.Id)
+                .NotNull()
+                .MustAsync(LeaveTypeMustExist);
+
             RuleFor(p => p.Name)
             .NotEmpty().WithMessage("{PropertyName} is required. ")
             .NotNull()
@@ -34,9 +38,17 @@ namespace HR.LeaveManagement.Application.Features.LeaveType.Commands.CreateLeave
            
         }
 
-        private Task<bool> LeaveTypeNameUnique(UpdateLeaveTypeCommand command, CancellationToken token)
+        private async Task<bool> LeaveTypeNameUnique(UpdateLeaveTypeCommand command, CancellationToken token)
         {
-            return _leaveTypeRepository.IsLeaveTypeUnique(command.Name);
+            return await _leaveTypeRepository.IsLeaveTypeUnique(command.Name);
+        }
+
+
+        private async Task<bool> LeaveTypeMustExist(int id, CancellationToken token)
+        {
+            var leaveType = await _leaveTypeRepository.GetByIdAsync(id);
+
+            return leaveType != null;
         }
     }
 }
