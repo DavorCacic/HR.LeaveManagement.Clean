@@ -13,5 +13,5 @@ namespace HR.LeaveManagement.Application.Features.LeaveType.Queries.GetAllLeaveT
     //}
 
     //since this class will not be changed upon instatioation, it could be recort (imutable class)
-    public record GetLeaveTypeDetailsQuery(int Id) : IRequest<LeaveTypeDetailDto>;
+    public record GetLeaveTypeDetailsQuery(int Id) : IRequest<LeaveTypeDetailsDto>;
 }

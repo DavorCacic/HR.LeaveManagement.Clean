@@ -1,4 +1,7 @@
-﻿using HR.LeaveManagement.Application.Features.LeaveType.Queries.GetAllLeaveTypes;
+﻿using HR.LeaveManagement.Application.Features.LeaveType.Commands.CreateLeaveType;
+using HR.LeaveManagement.Application.Features.LeaveType.Commands.DeleteLeaveType;
+using HR.LeaveManagement.Application.Features.LeaveType.Commands.UpdateLeaveType;
+using HR.LeaveManagement.Application.Features.LeaveType.Queries.GetAllLeaveTypes;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,77 +24,63 @@ namespace HR.LeaveManagement.Api.Controllers
         [HttpGet]
         public async Task<List<LeaveTypeDto>> Get()
         {
-            var leaveTypes = await _mediator.Send(new GetLeaveTypeQuery());
+            var leaveTypes = await _mediator.Send(new GetLeaveTypesQuery());
             return leaveTypes;
         }
 
-        //// GET: LeaveTypesController/Details/5
-        //public ActionResult Details(int id)
-        //{
-        //    return View();
-        //}
 
-        //// GET: LeaveTypesController/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
+        // GET: LeaveTypesController/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<LeaveTypeDetailsDto>> Get(int id)
+        {
+            var leaveType = await _mediator.Send(new GetLeaveTypeDetailsQuery(id));
+            return Ok(leaveType);
+        }
 
-        //// POST: LeaveTypesController/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create(IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
 
-        //// GET: LeaveTypesController/Edit/5
-        //public ActionResult Edit(int id)
-        //{
-        //    return View();
-        //}
+        // POST: LeaveTypesController
+        [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> Post(CreateLeaveTypeCommand leaveType)
+        {
+            var response = await _mediator.Send(leaveType);
+            return CreatedAtAction(nameof(Get), new { id = response });
+        }
 
-        //// POST: LeaveTypesController/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+        // PUT: LeaveTypesController
+        [HttpPut("{id}")]
+        [ProducesResponseType(400)] // both ways (lines 54, 55) work the same.
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult> Put(UpdateLeaveTypeCommand leaveType)
+        {
+            await _mediator.Send(leaveType);
+            return NoContent();
+        }
 
-        //// GET: LeaveTypesController/Delete/5
-        //public ActionResult Delete(int id)
-        //{
-        //    return View();
-        //}
+        // DELETE: LeaveTypesController/5
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var command = new DeleteLeaveTypeCommand { Id = id };
+            await _mediator.Send(command);
+            return NoContent();
+        }
 
-        //// POST: LeaveTypesController/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Delete(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+
+
+
+
+
+
+
+
+
     }
 }
